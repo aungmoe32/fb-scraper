@@ -50,11 +50,12 @@ function getData() {
           scheduler.stopById(jobId);
           console.log(time(), " - Taking a break");
 
-          // sleep 20 minutes and restart job
+          // sleep * minutes and restart job
+          const sleep = process.env.SLEEP_AFTER_NEWPOST * 60 * 1000;
           setTimeout(() => {
             console.log(time(), " - Restart");
             scheduler.startById(jobId);
-          }, 2 * 60 * 1000);
+          }, sleep);
         } else {
           console.log(time(), " - No new post");
         }
@@ -64,10 +65,14 @@ function getData() {
 }
 
 const task = new AsyncTask("Getting latest post", getData);
-const job = new SimpleIntervalJob({ seconds: 30, runImmediately: true }, task, {
-  id: jobId,
-  preventOverrun: true,
-});
+const job = new SimpleIntervalJob(
+  { seconds: process.env.FETCH_INTERVAL * 60, runImmediately: true },
+  task,
+  {
+    id: jobId,
+    preventOverrun: true,
+  }
+);
 
 scheduler.addSimpleIntervalJob(job);
 
