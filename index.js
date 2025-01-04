@@ -6,6 +6,7 @@ const {
   AsyncTask,
 } = require("toad-scheduler");
 const moment = require("moment");
+const { send } = require("./slack");
 require("dotenv").config();
 
 // Initialize the ApifyClient with API token
@@ -31,7 +32,7 @@ const scheduler = new ToadScheduler();
 let latest_post = null;
 const jobId = "latest_post";
 function getData() {
-  console.log(time(), " - Fetching from actor ");
+  console.log(time(), " - Fetching from Apify ");
   // Run the Actor and wait for it to finish
   return client
     .actor("KoJrdxJCTtpon81KY")
@@ -47,6 +48,14 @@ function getData() {
         if (latest_post && latest_post.postId != item.postId) {
           // New post uploaded
           console.log(time(), " - New post : ", item.postId);
+
+          // sending Slack message
+          send(
+            `Post ID : ${item.postId} \n` + item.text.substring(0, 50) + " ..."
+          );
+          console.log("Sending message to Slack");
+
+          // stopping job
           scheduler.stopById(jobId);
           console.log(time(), " - Taking a break");
 
