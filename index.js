@@ -7,6 +7,7 @@ const {
 } = require("toad-scheduler");
 const moment = require("moment");
 const { send } = require("./slack");
+require("./server");
 require("dotenv").config();
 
 // Initialize the ApifyClient with API token
