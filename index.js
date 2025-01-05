@@ -74,6 +74,8 @@ function getData() {
     });
 }
 
+console.log("Page URL : ", process.env.PAGE_URL);
+
 // Creating a job
 const task = new AsyncTask("Getting latest post", getData);
 const job = new SimpleIntervalJob(
