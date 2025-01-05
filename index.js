@@ -5,7 +5,7 @@ const {
   Task,
   AsyncTask,
 } = require("toad-scheduler");
-const moment = require("moment");
+const moment = require("moment-timezone");
 const { send } = require("./slack");
 require("./server");
 require("dotenv").config();
@@ -26,7 +26,7 @@ const input = {
 };
 
 function time() {
-  return moment().format("MMMM Do YYYY, h:mm:ss a");
+  return moment().tz("Asia/Yangon").format("MMMM Do YYYY, h:mm:ss a");
 }
 
 const scheduler = new ToadScheduler();
