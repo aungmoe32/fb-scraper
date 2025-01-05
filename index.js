@@ -35,7 +35,7 @@ function getData() {
   console.log(time(), " - Fetching from Apify ");
   // Run the Actor and wait for it to finish
   return client
-    .actor("KoJrdxJCTtpon81KY")
+    .actor(process.env.ACTOR_ID)
     .call(input)
     .then((run) => {
       // Fetch and print Actor results from the run's dataset (if any)
