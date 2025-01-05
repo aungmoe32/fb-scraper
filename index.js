@@ -52,13 +52,16 @@ function getData() {
 
           // sending Slack message
           send(
-            `Post ID : ${item.postId} \n` + item.text.substring(0, 50) + " ..."
+            `Post ID : ${item.postId} \n` + item.text.substring(0, 100) + " ..."
           );
           console.log("Sending message to Slack");
 
           // stopping job
           scheduler.stopById(jobId);
-          console.log(time(), " - Taking a break");
+          console.log(
+            time(),
+            ` - Taking a break. ${process.env.SLEEP_AFTER_NEWPOST} min.`
+          );
 
           // sleep * minutes and restart job
           const sleep = process.env.SLEEP_AFTER_NEWPOST * 60 * 1000;
@@ -67,7 +70,11 @@ function getData() {
             scheduler.startById(jobId);
           }, sleep);
         } else {
-          console.log(time(), " - No new post");
+          console.log(
+            time(),
+            " - No new post",
+            `[Latest post : ${item.text.substring(0, 50)}]`
+          );
         }
         latest_post = item;
       });
